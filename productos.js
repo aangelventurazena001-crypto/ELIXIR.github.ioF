@@ -1564,4 +1564,7 @@ const productos = {
                     origen: 'Reino Unido'
                 }
             }
+
 };
+
+module.exports = { productos };
