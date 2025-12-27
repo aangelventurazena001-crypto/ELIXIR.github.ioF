@@ -1003,7 +1003,7 @@ async function finalizarCompra() {
     
     // Crear pedido
     try {
-        const response = await fetch('/api/...', {
+        const response = await fetch('http://localhost:3000/api/pedido/crear', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -1058,5 +1058,4 @@ window.addEventListener('load', () => {
 </script>
 
 </body>
-
 </html>
