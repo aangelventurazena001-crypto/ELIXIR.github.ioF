@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>élixir Parfum - Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="portada.css">
+</head>
+<body>
+
+<div class="contact-sidebar">
+    <a href="https://wa.link/vazab7" target="_blank" class="contact-item contact-whatsapp">
+        <div class="icon-wrapper">
+            <i class="fa-brands fa-whatsapp"></i>
+            <span class="ping"></span>
+        </div>
+        <div class="contact-text">
+            <strong>WhatsApp</strong>
+            <span>Chatea ahora</span>
+            <span class="phone">+51 924 859 152</span>
+        </div>
+    </a>
+
+    <a href="https://www.facebook.com/profile.php?id=61572488352776" target="_blank" class="contact-item contact-facebook">
+        <div class="icon-wrapper">
+            <i class="fa-brands fa-facebook-f"></i>
+            <span class="ping"></span>
+        </div>
+        <div class="contact-text">
+            <strong>Facebook</strong>
+            <span>Síguenos</span>
+        </div>
+    </a>
+
+    <a href="https://www.instagram.com/elixirparfum.cl?igsh=c25hZzU2dWU1NTUy" target="_blank" class="contact-item contact-instagram">
+        <div class="icon-wrapper">
+            <i class="fa-brands fa-instagram"></i>
+            <span class="ping"></span>
+        </div>
+        <div class="contact-text">
+            <strong>Instagram</strong>
+            <span>@elixirparfum</span>
+        </div>
+    </a>
+
+    <a href="mailto:contacto@elixirparfum.com?subject=Elixir%20Parfum%20-%20Consulta&body=Hola,%20quiero%20más%20información%20sobre%20sus%20productos." class="contact-item contact-email">
+        <div class="icon-wrapper">
+            <i class="fa-solid fa-envelope"></i>
+            <span class="ping"></span>
+        </div>
+        <div class="contact-text">
+            <strong>Email</strong>
+            <span>Escríbenos</span>
+        </div>
+    </a>
+</div>
+
+<!-- Notificación Flotante -->
+<div class="floating-notification" id="floatingNotif">
+    <button class="close-notif" onclick="closeNotif()">
+        <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="notif-icon">
+        <i class="fa-solid fa-gift"></i>
+    </div>
+    <div class="notif-content">
+        <strong>¡Oferta Especial!</strong>
+        <p>Usa el código <span class="code">ELIXIR10</span> y obtén S/. 50 de descuento</p>
+    </div>
+</div>
+
+    <!-- Partículas -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="header-left" onclick="window.location.href='index.html'">
+            <h1>élixir Parfum</h1>
+            <p>Aromas y Elegancia</p>
+        </div>
+        
+        <div class="header-right">
+            <nav class="nav-links">
+                <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+                
+                <!-- Dropdown de Aromas -->
+                <div class="dropdown" style="position: relative; display: inline-block;">
+                    <button class="dropdown-btn" onclick="toggleDropdown(event)" style="padding: 0.7rem 1.5rem; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(239, 191, 4, 0.3); border-radius: 50px; color: #EFBF04; font-weight: 500; cursor: pointer; transition: all 0.3s ease; font-size: 0.9rem;">
+                        <i class="fa-solid fa-spray-can"></i> Aromas <i class="fa-solid fa-chevron-down" style="font-size: 0.7rem; margin-left: 0.3rem;"></i>
+                    </button>
+                    <div id="dropdownMenu" class="dropdown-content" style="display: none; position: absolute; top: 100%; left: 0; background: rgba(20, 20, 20, 0.98); backdrop-filter: blur(20px); border: 1px solid rgba(239, 191, 4, 0.3); border-radius: 15px; margin-top: 0.5rem; min-width: 200px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); z-index: 1000; overflow: hidden;">
+                        <a href="hombre.html" style="display: block; padding: 1rem 1.5rem; color: rgba(255,255,255,0.8); text-decoration: none; transition: all 0.3s ease; border-bottom: 1px solid rgba(239, 191, 4, 0.1);">
+                            <i class="fa-solid fa-mars"></i> Hombres
+                        </a>
+                        <a href="mujeres.html" style="display: block; padding: 1rem 1.5rem; color: rgba(255,255,255,0.8); text-decoration: none; transition: all 0.3s ease; border-bottom: 1px solid rgba(239, 191, 4, 0.1);">
+                            <i class="fa-solid fa-venus"></i> Mujeres
+                        </a>
+                        <a href="unisex.html" style="display: block; padding: 1rem 1.5rem; color: rgba(255,255,255,0.8); text-decoration: none;">
+                            <i class="fa-solid fa-star"></i> Unisex
+                        </a>
+                    </div>
+                </div>
+            </nav>
+    
+            <div class="search-container">
+                <input type="text" id="searchInput" class="search-input" placeholder="Buscar perfumes...">
+                <i class="fa-solid fa-search search-icon"></i>
+                <div id="searchResults" class="search-results"></div>
+            </div>
+            
+            <a href="carrito.html" class="cart-btn">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span id="carritoContador" style="position: absolute; top: -8px; right: -8px; background: #EFBF04; color: #000; border-radius: 50%; width: 22px; height: 22px; display: none; justify-content: center; align-items: center; font-size: 0.75rem; font-weight: 700;">0</span>
+            </a>
+
+            <div id="userSection">
+                <button class="login-btn" id="openLogin">
+                    <i class="fa-solid fa-user"></i> Login
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero-video">
+        <video autoplay muted loop playsinline>
+            <source src="videos/motion2Fast_Video_esenciara_perfume_P_0 (1).mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay">
+            <h2>Bienvenidos a élixir Parfum</h2>
+            <p>Tu destino definitivo para descubrir fragancias exquisitas que realzan tu esencia y estilo.</p>
+        </div>
+    </section>
+
+    <!-- Productos Destacados -->
+    <section class="productos">
+        <div class="section-title">
+            <h2>Colección Destacada</h2>
+            <p>Los perfumes más exclusivos y populares</p>
+        </div>
+
+        <div class="productos-grid">
+            <div class="card" onclick="window.location.href='hola3.html?id=dior-sauvage&from=index'">
+                <div class="img-container">
+                    <img src="img/suaveg1.jpeg" alt="Dior Sauvage">
+                </div>
+                <h3>Dior Sauvage</h3>
+                <p>Audaz y moderno, para hombres seguros de sí mismos.</p>
+            </div>
+
+            <div class="card" onclick="window.location.href='hola3.html?id=la-vie-est-belle&from=index'">
+                <div class="img-container">
+                    <img src="img/lavie1.jpeg" alt="La Vie Est Belle">
+                </div>
+                <h3>La Vie Est Belle</h3>
+                <p>Dulce y femenina, transmite alegría y armonía.</p>
+            </div>
+
+            <div class="card" onclick="window.location.href='hola3.html?id=bleu-chanel&from=index'">
+                <div class="img-container">
+                    <img src="img/belu1.jpeg" alt="Bleu de Chanel">
+                </div>
+                <h3>Bleu de Chanel</h3>
+                <p>Elegante y sofisticado, transmite confianza.</p>
+            </div>
+
+            <div class="card" onclick="window.location.href='hola3.html?id=coco-mademoiselle&from=index'">
+                <div class="img-container">
+                    <img src="img/coco1.jpeg" alt="Coco">
+                </div>
+                <h3>Coco Mademoiselle</h3>
+                <p>Sensual y sofisticado, un clásico moderno.</p>
+            </div>
+
+            <div class="card" onclick="window.location.href='hola3.html?id=acqua-gio&from=index'">
+                <div class="img-container">
+                    <img src="img/gio1.jpeg" alt="Acqua Di Gio">
+                </div>
+                <h3>Acqua di Gio Profondo</h3>
+                <p>Refrescante y profundo, aroma sofisticado.</p>
+            </div>
+
+            <div class="card" onclick="window.location.href='hola3.html?id=bad-boy'">
+                <div class="img-container">
+                    <img src="img/bad1.jpeg" alt="Bad Boy">
+                </div>
+                <h3>Bad Boy</h3>
+                <p>Fuerte y seductor, para hombres atrevidos.</p>
+            </div>
+
+            <div class="card" onclick="window.location.href='hola3.html?id=jo-malone-wood&from=unisex'">
+                <div class="img-container">
+                    <img src="img/jo-malone-wood2.jpeg" alt="Jo Malone Wood Sage & Sea Salt">
+                </div>
+                <h3>Jo Malone Wood Sage & Sea Salt</h3>
+                <p>Marino y terroso, con salvia, sal marina y algas. Escapada costera refrescante.</p>
+            </div>
+
+            <div class="card" onclick="window.location.href='hola3.html?id=creed-aventus&from=unisex'">
+                <div class="img-container">
+                    <img src="img/creed-aventus2.jpeg" alt="Creed Aventus">
+                </div>
+                <h3>Creed Aventus</h3>
+                <p>Frutal y ahumado, con piña, bergamota, abedul y almizcle. Poder y distinción.</p>
+            </div>  
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>élixir Parfum</h3>
+                <p>Tu destino premium para las fragancias más exclusivas y elegantes del mundo. Descubre el aroma que define tu esencia.</p>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/profile.php?id=61572488352776"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/elixirparfum.cl?igsh=c25hZzU2dWU1NTUy"><i class="fab fa-instagram"></i></a>
+                    <a href="https://x.com/?lang=es"><i class="fab fa-twitter"></i></a>
+                    <a href="https://wa.link/vazab7"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3>Enlaces Rápidos</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html"><i class="fa-solid fa-chevron-right"></i> Home</a></li>
+                    <li><a href="hombre.html"><i class="fa-solid fa-chevron-right"></i> Perfumes Hombres</a></li>
+                    <li><a href="mujeres.html"><i class="fa-solid fa-chevron-right"></i> Perfumes Mujeres</a></li>
+                    <li><a href="unisex.html"><i class="fa-solid fa-chevron-right"></i> Perfumes Unisex</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Información</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Sobre Nosotros</a></li>
+                    <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Términos y Condiciones</a></li>
+                    <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Política de Privacidad</a></li>
+                    <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Envíos y Devoluciones</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <p><i class="fa-solid fa-location-dot"></i> Lambayeque, Perú</p>
+                <p><i class="fa-solid fa-phone"></i> +51 924 859 152</p>
+                <p><i class="fa-solid fa-envelope"></i> contacto@elixirparfum.com</p>
+                <p><i class="fa-solid fa-clock"></i> Lun - Sab: 9:00 AM - 8:00 PM</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 élixir Parfum. Todos los derechos reservados. Diseñado con <i class="fa-solid fa-heart" style="color: #EFBF04;"></i></p>
+        </div>
+    </footer>
+
+    <!-- Botón Volver Arriba -->
+    <button class="btn-scroll-top" id="scrollTopBtn" onclick="scrollToTop()">
+        <div class="scroll-progress"></div>
+        <i class="fa-solid fa-arrow-up"></i>
+        <span class="tooltip-scroll">Volver arriba</span>
+    </button>
+
+    <!-- Modal Login/Registro -->
+    <div class="modal" id="modalLogin" style="display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); justify-content: center; align-items: center; overflow-y: auto;">
+        <div class="modal-content" style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); padding: 2.5rem; border-radius: 20px; box-shadow: 0 20px 60px rgba(239, 191, 4, 0.4); border: 2px solid rgba(239, 191, 4, 0.3); position: relative; width: 90%; max-width: 450px; max-height: 90vh; overflow-y: auto;">
+            <span class="close" style="position: absolute; top: 1rem; right: 1.5rem; font-size: 2rem; color: #EFBF04; cursor: pointer; z-index: 10;">&times;</span>
+            
+            <div style="display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 2px solid rgba(255,255,255,0.1);">
+                <button id="tabLogin" style="flex: 1; padding: 1rem; background: none; border: none; color: #EFBF04; font-size: 1rem; font-weight: 600; cursor: pointer; border-bottom: 3px solid #EFBF04;">
+                    <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión
+                </button>
+                <button id="tabRegistro" style="flex: 1; padding: 1rem; background: none; border: none; color: rgba(255, 255, 255, 0.6); font-size: 1rem; font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent;">
+                    <i class="fa-solid fa-user-plus"></i> Registrarse
+                </button>
+            </div>
+
+            <div id="formLogin">
+                <h2 style="margin-bottom: 1.5rem; color: #EFBF04;"><i class="fa-solid fa-user"></i> Iniciar Sesión</h2>
+                <form id="loginForm">
+                    <label style="display: block; margin-bottom: 0.5rem; color: #fff;"><i class="fa-solid fa-envelope"></i> Correo:</label>
+                    <input type="email" id="loginEmail" placeholder="tu@correo.com" required style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(239, 191, 4, 0.3); border-radius: 8px; color: white; box-sizing: border-box;">
+
+                    <label style="display: block; margin-bottom: 0.5rem; color: #fff;"><i class="fa-solid fa-key"></i> Contraseña:</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required style="width: 100%; padding: 0.8rem; margin-bottom: 1.5rem; background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(239, 191, 4, 0.3); border-radius: 8px; color: white; box-sizing: border-box;">
+
+                    <button type="submit" style="width: 100%; padding: 1rem; background: linear-gradient(135deg, #EFBF04 0%, #d4a003 100%); color: #000; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 700; cursor: pointer;">
+                        <i class="fa-solid fa-door-open"></i> Entrar
+                    </button>
+                </form>
+            </div>
+
+            <div id="formRegistro" style="display: none;">
+                <h2 style="margin-bottom: 1.5rem; color: #EFBF04;"><i class="fa-solid fa-user-plus"></i> Crear Cuenta</h2>
+                <form id="registroForm">
+                    <label style="display: block; margin-bottom: 0.5rem; color: #fff;"><i class="fa-solid fa-user"></i> Nombres:</label>
+                    <input type="text" id="regNombres" placeholder="Juan" required style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(239, 191, 4, 0.3); border-radius: 8px; color: white; box-sizing: border-box;">
+
+                    <label style="display: block; margin-bottom: 0.5rem; color: #fff;"><i class="fa-solid fa-user"></i> Apellidos:</label>
+                    <input type="text" id="regApellidos" placeholder="Pérez" required style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(239, 191, 4, 0.3); border-radius: 8px; color: white; box-sizing: border-box;">
+
+                    <label style="display: block; margin-bottom: 0.5rem; color: #fff;"><i class="fa-solid fa-envelope"></i> Correo:</label>
+                    <input type="email" id="regEmail" placeholder="tu@correo.com" required style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(239, 191, 4, 0.3); border-radius: 8px; color: white; box-sizing: border-box;">
+
+                    <label style="display: block; margin-bottom: 0.5rem; color: #fff;"><i class="fa-solid fa-phone"></i> Teléfono:</label>
+                    <input type="tel" id="regTelefono" placeholder="924859152" required style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(239, 191, 4, 0.3); border-radius: 8px; color: white; box-sizing: border-box;">
+
+                    <label style="display: block; margin-bottom: 0.5rem; color: #fff;"><i class="fa-solid fa-key"></i> Contraseña:</label>
+                    <input type="password" id="regPassword" placeholder="Mínimo 6 caracteres" required minlength="6" style="width: 100%; padding: 0.8rem; margin-bottom: 1.5rem; background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(239, 191, 4, 0.3); border-radius: 8px; color: white; box-sizing: border-box;">
+
+                    <button type="submit" style="width: 100%; padding: 1rem; background: linear-gradient(135deg, #EFBF04 0%, #d4a003 100%); color: #000; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 700; cursor: pointer;">
+                        <i class="fa-solid fa-user-plus"></i> Registrarse
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="productos.js"></script>
+    <script src="navigation.js"></script>
+    <script src="api.js"></script>
+
+    <script>
+        // Partículas
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.width = Math.random() * 100 + 50 + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 20 + 's';
+            particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Header scroll
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            const scrollBtn = document.getElementById('scrollTopBtn');
+            
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+
+            if (scrollBtn && window.scrollY > 300) {
+                scrollBtn.classList.add('visible');
+            } else if (scrollBtn) {
+                scrollBtn.classList.remove('visible');
+            }
+        });
+
+        // Volver arriba
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Cerrar notificación
+        function closeNotif() {
+            const notif = document.getElementById('floatingNotif');
+            if (notif) {
+                notif.style.animation = 'slideOutRight 0.5s ease';
+                setTimeout(() => notif.style.display = 'none', 500);
+            }
+        }
+
+        setTimeout(closeNotif, 10000);
+
+        // ============================================
+        // MODAL Y FUNCIONALIDAD
+        // ============================================
+        
+        // ⭐ FUNCIÓN DE INICIO DE SESIÓN (wrapper para login de api.js)
+        async function iniciarSesion(correo, password) {
+            if (typeof login === 'undefined') {
+                console.error('api.js no cargado');
+                return { success: false, error: 'Error al cargar el sistema' };
+            }
+            return await login(correo, password);
+        }
+
+        // ⭐ FUNCIÓN DE REGISTRO
+        async function registrarCliente(nombres, apellidos, correo, telefono, password) {
+            try {
+                const response = await fetch('http://localhost:3000/api/registrar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nombres, apellidos, correo, telefono, password })
+                });
+                
+                const data = await response.json();
+                return data.success ? { success: true } : { success: false, error: data.error };
+            } catch (error) {
+                return { success: false, error: 'Error de conexión' };
+            }
+        }
+
+        // Modal
+        const modal = document.getElementById('modalLogin');
+        const openBtn = document.getElementById('openLogin');
+        const closeBtn = document.querySelector('.close');
+        const tabLogin = document.getElementById('tabLogin');
+        const tabRegistro = document.getElementById('tabRegistro');
+
+        if (openBtn) openBtn.onclick = () => modal.style.display = 'flex';
+        if (closeBtn) closeBtn.onclick = () => modal.style.display = 'none';
+        window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+
+        // Tabs
+        if (tabLogin && tabRegistro) {
+            tabLogin.onclick = () => {
+                tabLogin.style.color = '#EFBF04';
+                tabLogin.style.borderBottom = '3px solid #EFBF04';
+                tabRegistro.style.color = 'rgba(255, 255, 255, 0.6)';
+                tabRegistro.style.borderBottom = '3px solid transparent';
+                document.getElementById('formLogin').style.display = 'block';
+                document.getElementById('formRegistro').style.display = 'none';
+            };
+            tabRegistro.onclick = () => {
+                tabRegistro.style.color = '#EFBF04';
+                tabRegistro.style.borderBottom = '3px solid #EFBF04';
+                tabLogin.style.color = 'rgba(255, 255, 255, 0.6)';
+                tabLogin.style.borderBottom = '3px solid transparent';
+                document.getElementById('formRegistro').style.display = 'block';
+                document.getElementById('formLogin').style.display = 'none';
+            };
+        }
+
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const correo = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const resultado = await iniciarSesion(correo, password);
+            
+            if (resultado.success) {
+                alert('¡Bienvenido! ' + resultado.cliente.Nombres);
+                modal.style.display = 'none';
+                actualizarHeaderUsuario();
+                actualizarContador();
+            } else {
+                alert('Error: ' + resultado.error);
+            }
+        });
+
+        // Registro
+        document.getElementById('registroForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const resultado = await registrarCliente(
+                document.getElementById('regNombres').value,
+                document.getElementById('regApellidos').value,
+                document.getElementById('regEmail').value,
+                document.getElementById('regTelefono').value,
+                document.getElementById('regPassword').value
+            );
+            
+            if (resultado.success) {
+                alert('¡Registro exitoso! Ahora puedes iniciar sesión');
+                tabLogin.click();
+                document.getElementById('loginEmail').value = document.getElementById('regEmail').value;
+            } else {
+                alert('Error: ' + resultado.error);
+            }
+        });
+
+        // ⭐ ACTUALIZAR HEADER CON NOMBRE
+        function actualizarHeaderUsuario() {
+            if (typeof obtenerClienteActual !== 'function') {
+                setTimeout(actualizarHeaderUsuario, 100);
+                return;
+            }
+            
+            const cliente = obtenerClienteActual();
+            const userSection = document.getElementById('userSection');
+            
+            if (cliente && userSection) {
+                userSection.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="color: #EFBF04; font-weight: 600; font-size: 0.9rem;">
+                            <i class="fa-solid fa-user"></i> Hola, ${cliente.Nombres}
+                        </span>
+                        <button onclick="cerrarSesion()" class="login-btn" style="background: rgba(239, 191, 4, 0.2); padding: 0.5rem 1rem; font-size: 0.9rem;">
+                            <i class="fa-solid fa-right-from-bracket"></i> Salir
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // ⭐ FUNCIÓN SEGURA PARA ACTUALIZAR CONTADOR
+        function actualizarContador() {
+            setTimeout(() => {
+                if (typeof actualizarContadorCarrito === 'function') {
+                    actualizarContadorCarrito();
+                }
+            }, 300);
+        }
+
+        // Inicializar
+        window.addEventListener('load', () => {
+            actualizarHeaderUsuario();
+            actualizarContador();
+        });
+        // Dropdown menu
+        function toggleDropdown(event) {
+            event.stopPropagation();
+            const dropdown = document.getElementById('dropdownMenu');
+            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Cerrar dropdown al hacer click fuera
+        window.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('dropdownMenu');
+            if (dropdown && !e.target.closest('.dropdown')) {
+                dropdown.style.display = 'none';
+            }
+        });
+
+        // Hover effects para dropdown items
+        document.addEventListener('DOMContentLoaded', () => {
+            const dropdownLinks = document.querySelectorAll('.dropdown-content a');
+            dropdownLinks.forEach(link => {
+                link.addEventListener('mouseenter', function() {
+                    this.style.background = 'rgba(239, 191, 4, 0.2)';
+                    this.style.color = '#EFBF04';
+                    this.style.paddingLeft = '2rem';
+                });
+                link.addEventListener('mouseleave', function() {
+                    this.style.background = 'transparent';
+                    this.style.color = 'rgba(255,255,255,0.8)';
+                    this.style.paddingLeft = '1.5rem';
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

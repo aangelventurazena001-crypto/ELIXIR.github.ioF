@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>élixir Parfum - Carrito de Compras</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(239,191,4,0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 25s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-120vh) translateX(100px) rotate(360deg); opacity: 0; }
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.2rem 3rem;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(30px);
+            border-bottom: 1px solid rgba(239, 191, 4, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .header.scrolled {
+            padding: 0.8rem 3rem;
+            background: rgba(0, 0, 0, 0.95);
+            box-shadow: 0 10px 50px rgba(239, 191, 4, 0.2);
+        }
+
+        .header-left h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #EFBF04 0%, #ffd966 50%, #EFBF04 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% 200%;
+            animation: shimmer 3s infinite;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header-left h1:hover {
+            transform: scale(1.05);
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .header-left p {
+            font-size: 0.75rem;
+            color: rgba(239, 191, 4, 0.7);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-top: 0.2rem;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .nav-links a {
+            padding: 0.7rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(239, 191, 4, 0.3);
+            border-radius: 50px;
+            color: #EFBF04;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-links a:hover {
+            border-color: #EFBF04;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(239, 191, 4, 0.3);
+        }
+
+        .container {
+            margin-top: 120px;
+            padding: 2rem 3rem 4rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .page-title {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            color: #EFBF04;
+            text-align: center;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .page-subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .carrito-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .carrito-vacio {
+            display: none;
+            text-align: center;
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(239, 191, 4, 0.3);
+            border-radius: 30px;
+            animation: scaleIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .carrito-vacio i {
+            font-size: 6rem;
+            color: rgba(239, 191, 4, 0.5);
+            margin-bottom: 2rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .carrito-vacio h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            color: #EFBF04;
+            margin-bottom: 1rem;
+        }
+
+        .carrito-vacio p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn-seguir {
+            padding: 1.2rem 3rem;
+            background: linear-gradient(135deg, #EFBF04 0%, #d4a004 100%);
+            color: #000 !important;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-seguir i {
+            color: #000;
+        }
+
+        .btn-seguir:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(239, 191, 4, 0.5);
+        }
+
+        .carrito-items {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .carrito-item {
+            background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(239, 191, 4, 0.3);
+            border-radius: 25px;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 140px 1fr auto;
+            gap: 2rem;
+            align-items: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .carrito-item:hover {
+            transform: translateY(-5px);
+            border-color: #EFBF04;
+            box-shadow: 0 15px 50px rgba(239, 191, 4, 0.3);
+        }
+
+        .item-imagen {
+            width: 140px;
+            height: 140px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid rgba(239, 191, 4, 0.2);
+        }
+
+        .item-imagen img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 5px 15px rgba(239, 191, 4, 0.3));
+            transition: transform 0.3s ease;
+        }
+
+        .carrito-item:hover .item-imagen img {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .item-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .item-titulo {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: #EFBF04;
+            margin-bottom: 0.3rem;
+        }
+
+        .item-marca {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95rem;
+        }
+
+        .item-detalles {
+            display: flex;
+            gap: 1.5rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .item-detalle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .item-detalle i {
+            color: #EFBF04;
+        }
+
+        .item-acciones {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 1.5rem;
+        }
+
+        .item-precio {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            color: #EFBF04;
+            font-weight: 700;
+        }
+
+        .cantidad-control {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(239, 191, 4, 0.3);
+            border-radius: 50px;
+            overflow: hidden;
+        }
+
+        .cantidad-btn {
+            padding: 0.8rem 1.2rem;
+            background: transparent;
+            border: none;
+            color: #EFBF04;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cantidad-btn:hover {
+            background: rgba(239, 191, 4, 0.2);
+        }
+
+        .cantidad-display {
+            padding: 0.8rem 1.5rem;
+            color: #fff;
+            font-weight: 600;
+            font-size: 1.1rem;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .btn-eliminar {
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            border-radius: 50px;
+            color: #ff4444;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-eliminar:hover {
+            background: rgba(255, 68, 68, 0.2);
+            border-color: #ff4444;
+            transform: scale(1.05);
+        }
+
+        .resumen-panel {
+            position: sticky;
+            top: 120px;
+            height: fit-content;
+        }
+
+        .resumen-card {
+            background: linear-gradient(135deg, rgba(239,191,4,0.15) 0%, rgba(239,191,4,0.05) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(239, 191, 4, 0.4);
+            border-radius: 30px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(239, 191, 4, 0.2);
+        }
+
+        .resumen-titulo {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            color: #EFBF04;
+            margin-bottom: 2rem;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .resumen-linea {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(239, 191, 4, 0.2);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.05rem;
+        }
+
+        .resumen-linea:last-of-type {
+            border-bottom: none;
+        }
+
+        .resumen-total {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid rgba(239, 191, 4, 0.4);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .resumen-total .label {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: #EFBF04;
+            font-weight: 700;
+        }
+
+        .resumen-total .valor {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            color: #EFBF04;
+            font-weight: 700;
+        }
+
+        .codigo-descuento {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            border: 1px solid rgba(239, 191, 4, 0.2);
+        }
+
+        .codigo-descuento label {
+            display: block;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+        }
+
+        .codigo-input-group {
+            display: flex;
+            gap: 0.8rem;
+            align-items: stretch;
+        }
+
+        .codigo-input-group input {
+            flex: 1;
+            padding: 0.9rem 1.2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(239, 191, 4, 0.3);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .codigo-input-group input:focus {
+            outline: none;
+            border-color: #EFBF04;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .codigo-input-group button {
+            padding: 0.9rem 1.8rem;
+            background: rgba(239, 191, 4, 0.2);
+            border: 1px solid #EFBF04;
+            border-radius: 12px;
+            color: #EFBF04;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .codigo-input-group button:hover {
+            background: rgba(239, 191, 4, 0.3);
+            transform: scale(1.05);
+        }
+
+        .btn-finalizar {
+            width: 100%;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            background: linear-gradient(135deg, #EFBF04 0%, #d4a004 100%);
+            color: #000;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            box-shadow: 0 10px 30px rgba(239, 191, 4, 0.3);
+        }
+
+        .btn-finalizar:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(239, 191, 4, 0.5);
+        }
+
+        .garantias {
+            margin-top: 2rem;
+            display: grid;
+            gap: 1rem;
+        }
+
+        .garantia-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .garantia-item i {
+            color: #EFBF04;
+            font-size: 1.5rem;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, rgba(10,10,10,0.95) 0%, rgba(0,0,0,0.98) 100%);
+            border-top: 1px solid rgba(239, 191, 4, 0.3);
+            padding: 3rem 3rem 1.5rem;
+            position: relative;
+            z-index: 10;
+            margin-top: 5rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        @media (max-width: 1024px) {
+            .carrito-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .resumen-panel {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .container {
+                padding: 2rem 1rem 3rem;
+                margin-top: 140px;
+            }
+
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .carrito-item {
+                grid-template-columns: 100px 1fr;
+                gap: 1rem;
+                padding: 1.5rem;
+            }
+
+            .item-acciones {
+                grid-column: 1 / -1;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="particles" id="particles"></div>
+
+<header class="header" id="header">
+    <div class="header-left" onclick="window.location.href='index.html'">
+        <h1>élixir Parfum</h1>
+        <p>Aromas y Elegancia</p>
+    </div>
+    
+    <div class="header-right">
+        <nav class="nav-links">
+            <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+            <a href="hombre.html"><i class="fa-solid fa-mars"></i> Hombres</a>
+            <a href="mujeres.html"><i class="fa-solid fa-venus"></i> Mujeres</a>
+            <a href="unisex.html"><i class="fa-solid fa-star"></i> Unisex</a>
+        </nav>
+    </div>
+</header>
+
+<div class="container">
+    <h1 class="page-title">
+        <i class="fa-solid fa-shopping-cart"></i> Mi Carrito
+    </h1>
+    <p class="page-subtitle">Revisa tus productos seleccionados</p>
+
+    <div class="carrito-vacio" id="carritoVacio">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <h2>Tu carrito está vacío</h2>
+        <p>¡Descubre nuestras fragancias exclusivas y añade tus favoritas!</p>
+        <a href="index.html" class="btn-seguir">
+            <i class="fa-solid fa-shop"></i>
+            Explorar Productos
+        </a>
+    </div>
+
+    <div class="carrito-layout" id="carritoContenido">
+        <div class="carrito-items" id="carritoItems">
+            <!-- Los productos se cargarán aquí -->
+        </div>
+
+        <div class="resumen-panel">
+            <div class="resumen-card">
+                <h2 class="resumen-titulo">Resumen de Compra</h2>
+                <div class="resumen-linea">
+                    <span>Subtotal</span>
+                    <span id="subtotalValor">S/. 0.00</span>
+                </div>
+                <div class="resumen-linea">
+                    <span>Descuento</span>
+                    <span id="descuentoValor">- S/. 0.00</span>
+                </div>
+                <div class="resumen-linea">
+                    <span>Impuestos (18%)</span>
+                    <span id="impuestosValor">S/. 0.00</span>
+                </div>
+                <div class="resumen-total">
+                    <span class="label">Total</span>
+                    <span class="valor" id="totalValor">S/. 0.00</span>
+                </div>
+
+                <div class="codigo-descuento">
+                    <label for="codigoInput">¿Tienes un código de descuento?</label>
+                    <div class="codigo-input-group">
+                        <input type="text" id="codigoInput" placeholder="Ingresa tu código aquí">
+                        <button onclick="aplicarDescuento()">Aplicar</button>
+                    </div>
+                </div>
+
+                <button class="btn-finalizar" onclick="finalizarCompra()">
+                    <i class="fa-solid fa-credit-card"></i>
+                    Finalizar Compra
+                </button>
+
+                <div class="garantias">
+                    <div class="garantia-item">
+                        <i class="fa-solid fa-check"></i>
+                        Compra 100% segura
+                    </div>
+                    <div class="garantia-item">
+                        <i class="fa-solid fa-truck-fast"></i>
+                        Envío rápido y confiable
+                    </div>
+                    <div class="garantia-item">
+                        <i class="fa-solid fa-headset"></i>
+                        Soporte al cliente 24/7
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="footer-content">
+        &copy; 2025 élixir Parfum. Todos los derechos reservados.
+    </div>
+</footer>
+
+<script src="api.js"></script>
+<script>
+// ================================================================
+// CARRITO.HTML - SCRIPT COMPLETO
+// ================================================================
+
+// Animar partículas de fondo
+const particlesContainer = document.getElementById('particles');
+const numParticles = 50;
+
+for (let i = 0; i < numParticles; i++) {
+    const particle = document.createElement('div');
+    particle.classList.add('particle');
+    particle.style.width = `${Math.random() * 10 + 5}px`;
+    particle.style.height = particle.style.width;
+    particle.style.left = `${Math.random() * 100}%`;
+    particle.style.top = `${Math.random() * 100}%`;
+    particle.style.animationDelay = `${Math.random() * 20}s`;
+    particle.style.animationDuration = `${20 + Math.random() * 30}s`;
+    particlesContainer.appendChild(particle);
+}
+
+// Manejo del header al hacer scroll
+const header = document.getElementById('header');
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+    } else {
+        header.classList.remove('scrolled');
+    }
+});
+
+// ================================================================
+// ✅ CARGAR CARRITO DESDE BASE DE DATOS
+// ================================================================
+const carritoVacio = document.getElementById('carritoVacio');
+const carritoContenido = document.getElementById('carritoContenido');
+const carritoItems = document.getElementById('carritoItems');
+const subtotalValor = document.getElementById('subtotalValor');
+const descuentoValor = document.getElementById('descuentoValor');
+const impuestosValor = document.getElementById('impuestosValor');
+const totalValor = document.getElementById('totalValor');
+let descuentoAplicado = 0;
+
+async function cargarCarritoDesdeBD() {
+    console.log('🛒 Cargando carrito desde BD...');
+
+    // Verificar login
+    if (!estaLogueado()) {
+        carritoVacio.style.display = 'block';
+        carritoContenido.style.display = 'none';
+        carritoVacio.innerHTML = `
+            <i class="fa-solid fa-user-lock" style="font-size: 6rem; color: rgba(239, 191, 4, 0.5); margin-bottom: 2rem; animation: bounce 2s infinite;"></i>
+            <h2 style="font-family: 'Cinzel', serif; font-size: 2.5rem; color: #EFBF04; margin-bottom: 1rem;">Sesión Requerida</h2>
+            <p style="color: rgba(255, 255, 255, 0.6); font-size: 1.1rem; margin-bottom: 2rem;">Debes iniciar sesión para ver tu carrito</p>
+            <a href="index.html" class="btn-seguir">
+                <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión
+            </a>
+        `;
+        return;
+    }
+
+    try {
+        const carritoBD = await verCarrito();
+        
+        console.log('📦 Respuesta del servidor:', carritoBD);
+
+        if (!carritoBD || !carritoBD.items || carritoBD.items.length === 0) {
+            console.log('⚠️ Carrito vacío');
+            carritoVacio.style.display = 'block';
+            carritoContenido.style.display = 'none';
+            return;
+        }
+
+        console.log(`✅ ${carritoBD.items.length} productos en el carrito`);
+
+        carritoVacio.style.display = 'none';
+        carritoContenido.style.display = 'grid';
+
+        carritoItems.innerHTML = carritoBD.items.map(item => {
+            const subtotalItem = (item.Precio_Unitario * item.Cantidad).toFixed(2);
+            
+            return `
+                <div class="carrito-item" data-id="${item.ID_Carrito}">
+                    <div class="item-imagen">
+                        <img src="${item.Imagen_Principal || 'img/placeholder.jpg'}" 
+                            alt="${item.Nombre}"
+                            onerror="this.src='img/placeholder.jpg'">
+                    </div>
+                    <div class="item-info">
+                        <h3 class="item-titulo">${item.Nombre}</h3>
+                        <p class="item-marca">by ${item.Marca}</p>
+                        <div class="item-detalles">
+                            <span class="item-detalle">
+                                <i class="fa-solid fa-flask"></i>
+                                ${item.Mililitros}ml
+                            </span>
+                            <span class="item-detalle">
+                                <i class="fa-solid fa-tag"></i>
+                                S/. ${item.Precio_Unitario.toFixed(2)} c/u
+                            </span>
+                        </div>
+                    </div>
+                    <div class="item-acciones">
+                        <div class="item-precio">S/. ${subtotalItem}</div>
+                        <div class="cantidad-control">
+                            <button class="cantidad-btn" onclick="cambiarCantidadBD(${item.ID_Carrito}, ${item.Cantidad}, -1)">
+                                <i class="fa-solid fa-minus"></i>
+                            </button>
+                            <div class="cantidad-display">${item.Cantidad}</div>
+                            <button class="cantidad-btn" onclick="cambiarCantidadBD(${item.ID_Carrito}, ${item.Cantidad}, 1)">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+                        <button class="btn-eliminar" onclick="confirmarEliminar(${item.ID_Carrito}, '${item.Nombre}')">
+                            <i class="fa-solid fa-trash"></i>
+                            Eliminar
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        actualizarResumenBD(carritoBD.items);
+
+    } catch (error) {
+        console.error('❌ Error cargando carrito:', error);
+        carritoVacio.style.display = 'block';
+        carritoContenido.style.display = 'none';
+        carritoVacio.innerHTML = `
+            <i class="fa-solid fa-exclamation-triangle" style="font-size: 6rem; color: #ff4444; margin-bottom: 2rem;"></i>
+            <h2 style="font-family: 'Cinzel', serif; font-size: 2.5rem; color: #ff4444; margin-bottom: 1rem;">Error al cargar</h2>
+            <p style="color: rgba(255, 255, 255, 0.6); font-size: 1.1rem; margin-bottom: 2rem;">No se pudo conectar con el servidor</p>
+            <button onclick="location.reload()" class="btn-seguir">
+                <i class="fa-solid fa-rotate-right"></i> Reintentar
+            </button>
+        `;
+    }
+}
+
+function actualizarResumenBD(items) {
+    let subtotal = 0;
+
+    items.forEach(item => {
+        subtotal += item.Precio_Unitario * item.Cantidad;
+    });
+
+    const impuestos = subtotal * 0.18;
+    const total = subtotal - descuentoAplicado + impuestos;
+
+    subtotalValor.innerText = `S/. ${subtotal.toFixed(2)}`;
+    descuentoValor.innerText = `- S/. ${descuentoAplicado.toFixed(2)}`;
+    impuestosValor.innerText = `S/. ${impuestos.toFixed(2)}`;
+    totalValor.innerText = `S/. ${total.toFixed(2)}`;
+}
+
+function cambiarCantidadBD(id_carrito, cantidadActual, delta) {
+    const nuevaCantidad = cantidadActual + delta;
+    
+    if (nuevaCantidad < 1) {
+        confirmarEliminar(id_carrito, 'este producto');
+        return;
+    }
+    
+    if (typeof mostrarAlerta === 'function') {
+        mostrarAlerta('info', 'Próximamente', 'Función de actualizar cantidad en desarrollo');
+    } else {
+        alert('Función próximamente');
+    }
+}
+
+function confirmarEliminar(id_carrito, nombre) {
+    const modal = document.createElement('div');
+    modal.id = 'modalConfirmarEliminar';
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 999999;
+    `;
+    
+    modal.innerHTML = `
+        <div style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); padding: 3rem; border-radius: 25px; border: 3px solid #ff4444; box-shadow: 0 25px 80px rgba(255,68,68,0.5); text-align: center; max-width: 450px; width: 90%;">
+            <i class="fa-solid fa-trash" style="font-size: 4rem; color: #ff4444; margin-bottom: 1.5rem;"></i>
+            <h2 style="color: #ff4444; font-size: 2rem; margin-bottom: 1rem;">¿Eliminar producto?</h2>
+            <p style="color: rgba(255,255,255,0.9); font-size: 1.1rem; margin-bottom: 2rem;">Se eliminará <strong style="color: #EFBF04;">${nombre}</strong> de tu carrito</p>
+            <div style="display: flex; gap: 1rem;">
+                <button onclick="cerrarModalEliminar()" style="flex: 1; padding: 1rem; background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.3); border-radius: 12px; color: #fff; cursor: pointer; font-size: 1rem; font-weight: 600;">Cancelar</button>
+                <button onclick="eliminarItemBD(${id_carrito})" style="flex: 1; padding: 1rem; background: #ff4444; border: none; border-radius: 12px; color: #fff; cursor: pointer; font-size: 1rem; font-weight: 700;">Eliminar</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+}
+
+function cerrarModalEliminar() {
+    const modal = document.getElementById('modalConfirmarEliminar');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+async function eliminarItemBD(id_carrito) {
+    console.log('🗑️ Eliminando item:', id_carrito);
+    
+    try {
+        const resultado = await eliminarDelCarrito(id_carrito);
+        
+        if (resultado && resultado.success) {
+            console.log('✅ Item eliminado');
+            
+            setTimeout(() => {
+                cargarCarritoDesdeBD();
+                if (typeof actualizarContadorCarrito === 'function') {
+                    actualizarContadorCarrito();
+                }
+            }, 500);
+            
+            if (typeof mostrarAlerta === 'function') {
+                mostrarAlerta('success', '¡Eliminado!', 'Producto eliminado del carrito correctamente');
+            }
+        } else {
+            console.error('❌ Error al eliminar');
+            if (typeof mostrarAlerta === 'function') {
+                mostrarAlerta('error', 'Error', 'No se pudo eliminar el producto');
+            }
+        }
+    } catch (error) {
+        console.error('❌ Error:', error);
+    }
+}
+
+function aplicarDescuento() {
+    const codigoInput = document.getElementById('codigoInput');
+    const codigo = codigoInput.value.trim().toUpperCase();
+
+    if (codigo === 'ELIXIR10') {
+        descuentoAplicado = 50;
+        if (typeof mostrarAlerta === 'function') {
+            mostrarAlerta('success', '¡Código aplicado!', 'Has recibido S/. 50 de descuento');
+        } else {
+            alert('¡Código aplicado! S/. 50 de descuento');
+        }
+    } else if (codigo === '') {
+        if (typeof mostrarAlerta === 'function') {
+            mostrarAlerta('error', 'Campo vacío', 'Por favor ingresa un código de descuento');
+        } else {
+            alert('Por favor ingresa un código');
+        }
+    } else {
+        descuentoAplicado = 0;
+        if (typeof mostrarAlerta === 'function') {
+            mostrarAlerta('error', 'Código inválido', 'El código ingresado no existe o ha expirado');
+        } else {
+            alert('Código inválido');
+        }
+    }
+    
+    cargarCarritoDesdeBD();
+}
+
+async function finalizarCompra() {
+    const cliente = obtenerClienteActual();
+    if (!cliente) {
+        alert('Debes iniciar sesión');
+        return;
+    }
+    
+    const carrito = await verCarrito();
+    if (!carrito || !carrito.items || carrito.items.length === 0) {
+        alert('Tu carrito está vacío');
+        return;
+    }
+    
+    // Crear pedido
+    try {
+        const response = await fetch('http://localhost:3000/api/pedido/crear', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                id_cliente: cliente.ID_Cliente,
+                id_direccion: 1, // Usar dirección por defecto
+                items: carrito.items.map(item => ({
+                    ID_Perfume: item.ID_Perfume || 1,
+                    ID_Tamano: item.ID_Tamano || 1,
+                    Cantidad: item.Cantidad,
+                    Precio_Unitario: item.Precio_Unitario
+                }))
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            // Modal de éxito
+            const modal = document.createElement('div');
+            modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: flex; align-items: center; justify-content: center; z-index: 999999;';
+            modal.innerHTML = `
+                <div style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); padding: 3rem; border-radius: 25px; border: 3px solid #EFBF04; box-shadow: 0 25px 80px rgba(239,191,4,0.5); text-align: center; max-width: 500px; width: 90%;">
+                    <i class="fa-solid fa-circle-check" style="font-size: 5rem; color: #4CAF50; margin-bottom: 1.5rem;"></i>
+                    <h2 style="color: #EFBF04; font-size: 2.5rem; margin-bottom: 1rem;">¡Pedido Confirmado!</h2>
+                    <p style="color: rgba(255,255,255,0.9); font-size: 1.2rem; margin-bottom: 1rem;">Tu código de pedido es:</p>
+                    <p style="color: #EFBF04; font-size: 2rem; font-weight: 700; margin-bottom: 1rem; font-family: monospace;">${data.codigo}</p>
+                    <p style="color: rgba(255,255,255,0.7); margin-bottom: 2rem;">Total: S/. ${data.total.toFixed(2)}</p>
+                    <button onclick="window.location.href='index.html'" style="width: 100%; padding: 1.2rem; background: linear-gradient(135deg, #EFBF04 0%, #d4a004 100%); color: #000; border: none; border-radius: 15px; font-size: 1.1rem; font-weight: 700; cursor: pointer;">
+                        Volver al Inicio
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        } else {
+            alert('Error: ' + data.error);
+        }
+    } catch (error) {
+        console.error('❌ Error:', error);
+        alert('Error al procesar el pedido');
+    }
+}
+
+// ✅ INICIALIZAR AL CARGAR LA PÁGINA
+window.addEventListener('load', () => {
+    console.log('🚀 Cargando carrito.html...');
+    cargarCarritoDesdeBD();
+    
+    if (typeof actualizarContadorCarrito === 'function') {
+        actualizarContadorCarrito();
+    }
+});
+</script>
+
+</body>
+</html>
