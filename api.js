@@ -2,7 +2,7 @@
 // API ELIXIR PARFUM - Con alertas bonitas
 // ================================================================
 
-const API_URL = 'http://localhost:3000/api';
+fetch('/api/login', {
 
 // ✅ MODAL DE ALERTA BONITO
 function mostrarAlerta(tipo, titulo, mensaje) {
