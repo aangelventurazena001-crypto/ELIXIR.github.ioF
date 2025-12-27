@@ -533,7 +533,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
 // REGISTRO
 async function registrarCliente(nombres, apellidos, correo, telefono, password) {
     try {
-        const response = await fetch('http://localhost:3000/api/registrar', {
+        const response = await fetch('/api/...', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ nombres, apellidos, correo, telefono, password })
@@ -609,4 +609,5 @@ window.addEventListener('load', () => {
 
 </body>
 </html>
+
 
